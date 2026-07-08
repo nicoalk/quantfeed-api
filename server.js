@@ -9,6 +9,17 @@ const PORT = process.env.PORT || 3000;
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
+app.get("/", (req, res) => {
+  res.json({
+    name: "QuantFeed API",
+    endpoints: {
+      "GET /stock-price": "?ticker=AAPL",
+      "GET /company-overview": "?ticker=AAPL",
+      "GET /business-news": "?q=federal reserve",
+    },
+  });
+});
+
 app.use(stockPriceRouter);
 app.use(companyOverviewRouter);
 app.use(businessNewsRouter);
