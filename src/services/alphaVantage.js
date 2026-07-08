@@ -4,6 +4,7 @@ import { withCache } from "./cache.js";
 const BASE_URL = "https://www.alphavantage.co/query";
 const QUOTE_TTL_MS = 60 * 1000; // quotes move fast, but a 1-minute cache absorbs repeat/burst lookups
 const OVERVIEW_TTL_MS = 24 * 60 * 60 * 1000; // fundamentals barely change day to day
+const FETCH_TIMEOUT_MS = 10_000;
 
 async function callAlphaVantage(params) {
   const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
@@ -17,7 +18,16 @@ async function callAlphaVantage(params) {
   }
   url.searchParams.set("apikey", apiKey);
 
-  const response = await fetch(url);
+  let response;
+  try {
+    response = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+  } catch (err) {
+    if (err.name === "TimeoutError" || err.name === "AbortError") {
+      throw new ApiError(504, "Alpha Vantage request timed out");
+    }
+    throw new ApiError(502, "Failed to reach Alpha Vantage");
+  }
+
   if (!response.ok) {
     throw new ApiError(502, `Alpha Vantage request failed with status ${response.status}`);
   }

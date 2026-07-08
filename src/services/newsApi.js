@@ -3,6 +3,7 @@ import { withCache } from "./cache.js";
 
 const BASE_URL = "https://newsapi.org/v2/everything";
 const NEWS_TTL_MS = 5 * 60 * 1000; // headlines don't change meaningfully minute to minute
+const FETCH_TIMEOUT_MS = 10_000;
 
 export async function getBusinessNews(query) {
   return withCache(`news:${query.toLowerCase()}`, NEWS_TTL_MS, async () => {
@@ -18,7 +19,16 @@ export async function getBusinessNews(query) {
     url.searchParams.set("pageSize", "20");
     url.searchParams.set("apiKey", apiKey);
 
-    const response = await fetch(url);
+    let response;
+    try {
+      response = await fetch(url, { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) });
+    } catch (err) {
+      if (err.name === "TimeoutError" || err.name === "AbortError") {
+        throw new ApiError(504, "NewsAPI request timed out");
+      }
+      throw new ApiError(502, "Failed to reach NewsAPI");
+    }
+
     const data = await response.json();
 
     if (data.status === "error") {
