@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getBusinessNews } from "../services/newsApi.js";
+import { getBusinessNews } from "../services/marketaux.js";
 import { ApiError } from "../services/ApiError.js";
 
 export const businessNewsRouter = Router();
