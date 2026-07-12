@@ -36,9 +36,9 @@ app.get("/", (req, res) => {
 app.use(
   paymentMiddlewareFromConfig(
     {
-      "GET /stock-price": { accepts: await inflowAccepts(client, { price: asX402Price("GET /stock-price") }) },
-      "GET /company-overview": { accepts: await inflowAccepts(client, { price: asX402Price("GET /company-overview") }) },
-      "GET /business-news": { accepts: await inflowAccepts(client, { price: asX402Price("GET /business-news") }) },
+      "GET /stock-price": { accepts: await inflowAccepts(client, { price: asX402Price("GET /stock-price"), schemes: ["balance"], networks: ["inflow:1"] }) },
+      "GET /company-overview": { accepts: await inflowAccepts(client, { price: asX402Price("GET /company-overview"), schemes: ["balance"], networks: ["inflow:1"] }) },
+      "GET /business-news": { accepts: await inflowAccepts(client, { price: asX402Price("GET /business-news"), schemes: ["balance"], networks: ["inflow:1"] }) },
     },
     [inflow],
     await inflowSchemeRegistrations(client),
