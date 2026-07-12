@@ -7,12 +7,10 @@ import {
   inflowAccepts,
   inflowSchemeRegistrations,
 } from "@inflowpayai/x402-seller";
-import { createMppxServer } from "mppx/server";
-import { inflowChargesNodeListener, inflow as inflowMppMethod } from "@inflowpayai/mpp-seller";
 import { stockPriceRouter } from "./src/routes/stockPrice.js";
 import { companyOverviewRouter } from "./src/routes/companyOverview.js";
 import { businessNewsRouter } from "./src/routes/businessNews.js";
-import { asX402Price, asMppPrice } from "./src/config/pricing.js";
+import { asX402Price } from "./src/config/pricing.js";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -21,8 +19,6 @@ const environment = process.env.INFLOW_ENVIRONMENT || "production";
 
 const inflow = createInflowFacilitator({ environment, apiKey });
 const client = await createInflowSellerClient({ environment, apiKey });
-
-const mppxServer = createMppxServer({ methods: [inflowMppMethod({ environment, apiKey })] });
 
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
@@ -48,10 +44,6 @@ app.use(
     await inflowSchemeRegistrations(client),
   )
 );
-
-app.get("/stock-price", inflowChargesNodeListener(mppxServer, [{ price: asMppPrice("GET /stock-price") }]));
-app.get("/company-overview", inflowChargesNodeListener(mppxServer, [{ price: asMppPrice("GET /company-overview") }]));
-app.get("/business-news", inflowChargesNodeListener(mppxServer, [{ price: asMppPrice("GET /business-news") }]));
 
 app.use(stockPriceRouter);
 app.use(companyOverviewRouter);

@@ -12,13 +12,10 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "@inflowpayai/mpp": "^0.7.0",
-    "@inflowpayai/mpp-seller": "^0.6.1",
     "@inflowpayai/x402-seller": "^0.6.2",
     "@x402/core": "^2.18.0",
     "@x402/express": "^2.18.0",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "mppx": "^0.6.31"
+    "express": "^4.19.2"
   }
 }
