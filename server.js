@@ -79,7 +79,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   if (statusCode >= 500) {
-    console.error(err);
+    console.error(err.message, err.stack);
   }
   res.status(statusCode).json({ error: err.message || "Internal server error" });
 });

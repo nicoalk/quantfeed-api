@@ -18,11 +18,11 @@ export function createPaymentDispatcher({ x402Middleware, x402ChallengeServer, m
 
     const [x402Response, mppResponse] = await Promise.all([
       x402ChallengeServer.getChallenge(req).catch((error) => {
-        console.error("x402 challenge generation failed:", error);
+        console.error("x402 challenge generation failed:", error.message, error.stack);
         return null;
       }),
       getMppChallenge(mppx, amount, req).catch((error) => {
-        console.error("MPP challenge generation failed:", error);
+        console.error("MPP challenge generation failed:", error.message, error.stack);
         return null;
       }),
     ]);
