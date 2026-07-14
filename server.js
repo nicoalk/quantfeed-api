@@ -17,6 +17,7 @@ import { businessNewsRouter } from "./src/routes/businessNews.js";
 import { asX402Price, asMppAmount, MPP_CURRENCY } from "./src/config/pricing.js";
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 3000;
 const apiKey = process.env.INFLOW_API_KEY;
 const environment = process.env.INFLOW_ENVIRONMENT || "production";
