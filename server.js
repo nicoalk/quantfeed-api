@@ -11,6 +11,7 @@ import { Mppx } from "mppx/server";
 import { inflow as inflowMppMethod } from "@inflowpayai/mpp-seller";
 import { createX402ChallengeServer } from "./src/payments/x402Challenge.js";
 import { createPaymentDispatcher } from "./src/payments/dispatcher.js";
+import { markMppTransactionConsumed } from "./src/payments/mppReplayGuard.js";
 import { stockPriceRouter } from "./src/routes/stockPrice.js";
 import { companyOverviewRouter } from "./src/routes/companyOverview.js";
 import { businessNewsRouter } from "./src/routes/businessNews.js";
@@ -54,6 +55,13 @@ const x402ChallengeServer = createX402ChallengeServer([inflow], x402Schemes, x40
 
 const mppx = Mppx.create({
   methods: [inflowMppMethod({ apiKey, environment, currency: MPP_CURRENCY })],
+});
+
+// Once a credential's payment succeeds, its transactionId must never be
+// accepted again - see src/payments/mppReplayGuard.js for why this can't be
+// left to InFlow's own redeem endpoint.
+mppx.onPaymentSuccess((context) => {
+  markMppTransactionConsumed(context.credential?.payload?.transactionId);
 });
 
 for (const routeKey of Object.keys(x402Routes)) {

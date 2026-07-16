@@ -1,6 +1,7 @@
 import { payment } from "mppx/express";
 import { hasX402Credential } from "./x402Challenge.js";
-import { hasMppCredential, getMppChallenge } from "./mppChallenge.js";
+import { hasMppCredential, getMppChallenge, getMppTransactionId } from "./mppChallenge.js";
+import { isMppTransactionConsumed } from "./mppReplayGuard.js";
 
 /**
  * Per-route gate that accepts payment via either protocol instead of
@@ -9,7 +10,7 @@ import { hasMppCredential, getMppChallenge } from "./mppChallenge.js";
  */
 export function createPaymentDispatcher({ x402Middleware, x402ChallengeServer, mppx, amount }) {
   return async function paymentDispatcher(req, res, next) {
-    if (hasMppCredential(req)) {
+    if (hasMppCredential(req) && !isMppTransactionConsumed(getMppTransactionId(req))) {
       return payment(mppx.charge, { amount })(req, res, next);
     }
     if (hasX402Credential(req)) {
