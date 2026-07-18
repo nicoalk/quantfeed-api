@@ -1,4 +1,6 @@
 import "dotenv/config";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import { paymentMiddlewareFromConfig } from "@x402/express";
 import {
@@ -17,6 +19,8 @@ import { companyOverviewRouter } from "./src/routes/companyOverview.js";
 import { businessNewsRouter } from "./src/routes/businessNews.js";
 import { asX402Price, asMppAmount, MPP_CURRENCY } from "./src/config/pricing.js";
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const app = express();
 app.set("trust proxy", 1);
 const PORT = process.env.PORT || 3000;
@@ -29,14 +33,7 @@ const client = await createInflowSellerClient({ environment, apiKey });
 app.get("/health", (req, res) => res.json({ status: "ok" }));
 
 app.get("/", (req, res) => {
-  res.json({
-    name: "QuantFeed API",
-    endpoints: {
-      "GET /stock-price": "?ticker=AAPL",
-      "GET /company-overview": "?ticker=AAPL",
-      "GET /business-news": "?q=federal reserve",
-    },
-  });
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 const x402Routes = {

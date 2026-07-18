@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QuantFeed API — Live Financial Data for AI Agents</title>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --panel: #131722;
+    --border: #232838;
+    --text: #e6e9f0;
+    --muted: #9aa3b5;
+    --accent: #4f8cff;
+    --code-bg: #0f1420;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 56px 24px 80px;
+  }
+  header {
+    margin-bottom: 40px;
+  }
+  h1 {
+    font-size: 2rem;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+  }
+  .tagline {
+    color: var(--muted);
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #7ee787;
+    background: rgba(126, 231, 135, 0.1);
+    border: 1px solid rgba(126, 231, 135, 0.3);
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+  }
+  section {
+    margin-bottom: 40px;
+  }
+  h2 {
+    font-size: 1.15rem;
+    margin: 0 0 16px;
+    color: var(--text);
+  }
+  p { color: var(--text); }
+  .endpoint {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 12px;
+  }
+  .endpoint code {
+    font-family: var(--mono);
+    font-size: 0.92rem;
+    color: var(--accent);
+    background: var(--code-bg);
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+  .endpoint p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .pricing-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .pricing-table th, .pricing-table td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+  .pricing-table th {
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .pricing-table tr:last-child td {
+    border-bottom: none;
+  }
+  .pricing-table td:last-child {
+    font-family: var(--mono);
+    color: var(--accent);
+  }
+  .note {
+    background: rgba(79, 140, 255, 0.08);
+    border: 1px solid rgba(79, 140, 255, 0.25);
+    border-radius: 10px;
+    padding: 16px 18px;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+  .note strong { color: var(--accent); }
+  .video-placeholder {
+    display: block;
+    background: var(--panel);
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 40px 18px;
+    text-align: center;
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: border-color 0.15s ease;
+  }
+  .video-placeholder:hover {
+    border-color: var(--accent);
+    color: var(--text);
+  }
+  footer {
+    color: var(--muted);
+    font-size: 0.85rem;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+  }
+  footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="badge">Live · Production</div>
+    <h1>QuantFeed</h1>
+    <p class="tagline">A live financial data API, payable by AI agents through InFlow's x402 and MPP payment protocols.</p>
+  </header>
+
+  <section>
+    <p>QuantFeed is a real, deployed service — not a demo. It serves real-time stock prices, company overview data, and business news, and is metered per call using InFlow's agent-native payment protocols (x402 and MPP), so an AI agent can pay for and consume data autonomously, with no API keys or manual checkout required.</p>
+  </section>
+
+  <section>
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+      <code>GET /stock-price?ticker=&lt;symbol&gt;</code>
+      <p>Real-time stock price data for the given ticker.</p>
+    </div>
+
+    <div class="endpoint">
+      <code>GET /company-overview?ticker=&lt;symbol&gt;</code>
+      <p>Company overview data for the given ticker.</p>
+    </div>
+
+    <div class="endpoint">
+      <code>GET /business-news</code>
+      <p>Business news.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Pricing</h2>
+    <table class="pricing-table">
+      <thead>
+        <tr>
+          <th>Endpoint</th>
+          <th>Price per call</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>/stock-price</td><td>$0.01</td></tr>
+        <tr><td>/company-overview</td><td>$0.02</td></tr>
+        <tr><td>/business-news</td><td>$0.02</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="note">
+      <strong>Note:</strong> Opening any of the endpoints above directly in a browser will return a <strong>402 Payment Required</strong> response. This is expected, correct behavior — not an error. These endpoints are metered for AI agents via InFlow's x402/MPP protocols, and payment happens as part of that protocol handshake rather than through a browser session.
+    </div>
+  </section>
+
+  <section>
+    <h2>Demo: an agent paying for data</h2>
+    <a class="video-placeholder" href="https://drive.google.com/drive/folders/1XZ3vtIRzzeqzkiO5zTpufnzHg2Oqa-ZK">
+      ▶ Demo recording — an AI agent paying for and receiving data from QuantFeed<br>
+    </a>
+  </section>
+
+  <footer>
+    QuantFeed API
+  </footer>
+
+</div>
+</body>
+</html>
